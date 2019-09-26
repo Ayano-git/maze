@@ -25,6 +25,33 @@
             font-family: Verdana, Geneva, Tahoma, sans-serif;
         }
 
+        .accueil {
+            display: block;
+            position: relative;
+            max-width: 100%;
+            height: 100%;
+            background: #00e5ff;
+        }
+
+        .all_content{
+            display: none;
+        }
+
+        .bloc_synopsis {
+            position: absolute;
+            z-index: 999;
+            left: 50%;
+            top: 50%;
+            transform: translateY(-50%) translateX(-50%);
+            font-size: 1.2em;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        h1 {
+            margin-top: 0;
+        }
+
         /* Bordures */
         .border_right {
             border-right: solid 1px;
@@ -53,11 +80,8 @@
 
         /* Grille */
         .grid {
-            position: absolute;
-            z-index: 900;
-            left: 50%;
-            top: 50%;
-            transform: translateY(-50%) translateX(-50%);
+            margin-left: 400px;
+            margin-top: 20px;
             display: grid;
             width: 500px;
             grid-template-columns: repeat(10, 50px);
@@ -79,7 +103,13 @@
             height: 50px;
             display: inline-block;
             transform: rotate(0deg);
-            animation: transform 10s;
+        }
+
+        .obstacle {
+            background: silver;
+            width: 50px;
+            height: 50px;
+            display: inline-block;
         }
 
         .end {
@@ -189,7 +219,7 @@
             background: silver;
             border: none;
             border-radius: 5px;
-            padding: 10 30px;
+            padding: 10px 30px;
             font-size: 1.2em;
         }
 
@@ -210,8 +240,15 @@
         }
 
         .close_pop_up {
-            background: blue;
-            border: none;
+            background: skyblue;
+            border: 2px solid;
+            border-radius: 5px;
+            padding: 10px 20px;
+        }
+
+        .close_synopsis {
+            background: skyblue;
+            border: 2px solid;
             border-radius: 5px;
             padding: 10px 20px;
         }
@@ -239,11 +276,37 @@
         .blue {
             background: #00e5ff;
         }
+
+        img {
+            width: 100%;
+            height: 100%;
+        }
     </style>
 </head>
 
 <body>
 
+    <div class="accueil">
+        <div class="bloc_synopsis">
+            <h1>Synopsis</h1>
+
+            <div class="english_text synopsis">
+                <p>It's 9 o'clock and you'll be late at your work but...</p>
+                <p>Oh no, some Yellow Jackets are blocking the way...</p>
+                <p>You'll need to pass through them by using differents streets</p>
+                <p>Good luck my friend :)</p>
+            </div>
+
+            <!-- <div class="french_text synopsis">
+                <p>Il est 9 heure et tu vas être en retard au travail mais... </p>
+                <p>Oh non, des Gilets Jaunes bloquent le chemin...</p>
+                <p>Tu vas devoir passer au travers en utilisant différentes ruelles</p>
+                <p> Bonne chance mon ami :)</p>
+            </div> -->
+
+            <button class="close_synopsis"> Click on me to go ! </button>
+        </div>
+    </div>
 
     <div class="winner_pop_up">
         <p>
@@ -259,29 +322,31 @@
 
     </div>
 
-    <div class="buttons_group">
-        <button class="reset_button buttons">
-            Reset
-        </button>
-        <button class="solution_button buttons">
-            Show solution
-        </button>
-        <div class="color_meaning">
-            <div class="green color_meaning_block">
-                Entry
-            </div>
-            <div class="blue color_meaning_block">
-                Your way
-            </div>
-            <div class="red color_meaning_block">
-                Exit
+    <div class="all_content">
+
+        <div class="buttons_group">
+            <button class="reset_button buttons">
+                Reset
+            </button>
+            <button class="solution_button buttons">
+                Show solution
+            </button>
+            <div class="color_meaning">
+                <div class="green color_meaning_block">
+                    Entry
+                </div>
+                <div class="blue color_meaning_block">
+                    Your way
+                </div>
+                <div class="red color_meaning_block">
+                    Exit
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="grid">
+        <div class="grid">
 
-        <!-- Premier bloc --- goutière simple
+            <!-- Premier bloc --- goutière simple
 
         <div class="first_block bloc">
             <div class="first_block_1 border_right border_left"></div>
@@ -290,14 +355,14 @@
         -->
 
 
-        <!-- Second bloc --- goutière coin
+            <!-- Second bloc --- goutière coin
         <div class="second_block relative bloc">
             <div class="second_block_1 border_left border_top absolute"></div>
             <div class="second_block_2 border_left border_top absolute"></div>
         </div> 
     -->
 
-        <!-- Troisième bloc --- goutière 3 sorties
+            <!-- Troisième bloc --- goutière 3 sorties
         <div class="third_block relative bloc">
             <div class="third_block_1"></div>
             <div class="third_block_2 border_left border_bottom absolute"></div>
@@ -305,7 +370,7 @@
         </div> 
     -->
 
-        <!-- Quatrième bloc --- goutière 4 sorties
+            <!-- Quatrième bloc --- goutière 4 sorties
         <div class="fourth_block relative bloc">
             <div class="fourth_block_1 border_right border_bottom absolute"></div>
             <div class="fourth_block_2 border_left border_bottom absolute"></div>
@@ -315,499 +380,484 @@
     -->
 
 
-        <!-- Ligne 1 -->
-
-        <div class="second_block relative start">
-            <div class="second_block_1 border_left border_top absolute"></div>
-            <div class="second_block_2 border_left border_top absolute"></div>
-        </div>
-
-        <div class="first_block bloc">
-            <div class="first_block_1 border_right border_left"></div>
-        </div>
-
-        <div class="third_block relative bloc">
-            <div class="third_block_1"></div>
-            <div class="third_block_2 border_left border_bottom absolute"></div>
-            <div class="third_block_3 border_left border_top absolute"></div>
-        </div>
-
-        <div class="second_block relative bloc">
-            <div class="second_block_1 border_left border_top absolute"></div>
-            <div class="second_block_2 border_left border_top absolute"></div>
-        </div>
-
-        <div class="first_block bloc">
-            <div class="first_block_1 border_right border_left"></div>
-        </div>
-
-        <div class="first_block bloc">
-            <div class="first_block_1 border_right border_left"></div>
-        </div>
-
-        <div class="second_block relative bloc">
-            <div class="second_block_1 border_left border_top absolute"></div>
-            <div class="second_block_2 border_left border_top absolute"></div>
-        </div>
-
-        <div class="first_block bloc">
-            <div class="first_block_1 border_right border_left"></div>
-        </div>
-
-        <div class="first_block bloc">
-            <div class="first_block_1 border_right border_left"></div>
-        </div>
-
-        <div class="second_block relative bloc">
-            <div class="second_block_1 border_left border_top absolute"></div>
-            <div class="second_block_2 border_left border_top absolute"></div>
-        </div>
-
-        <!-- Ligne 2 -->
-
-        <div class="third_block relative bloc bon_angle_0_270">
-            <div class="third_block_1"></div>
-            <div class="third_block_2 border_left border_bottom absolute"></div>
-            <div class="third_block_3 border_left border_top absolute"></div>
-        </div>
-
-        <div class="first_block bloc bon_angle_90_270">
-            <div class="first_block_1 border_right border_left"></div>
-        </div>
-
-        <div class="third_block relative bloc bon_angle_90_180">
-            <div class="third_block_1"></div>
-            <div class="third_block_2 border_left border_bottom absolute"></div>
-            <div class="third_block_3 border_left border_top absolute"></div>
-        </div>
-
-        <div class="first_block bloc">
-            <div class="first_block_1 border_right border_left"></div>
-        </div>
-
-        <div class="first_block bloc">
-            <div class="first_block_1 border_right border_left"></div>
-        </div>
-
-        <div class="first_block bloc">
-            <div class="first_block_1 border_right border_left"></div>
-        </div>
-
-        <div class="first_block bloc">
-            <div class="first_block_1 border_right border_left"></div>
-        </div>
-
-        <div class="first_block bloc">
-            <div class="first_block_1 border_right border_left"></div>
-        </div>
-
-        <div class="first_block bloc">
-            <div class="first_block_1 border_right border_left"></div>
-        </div>
-
-        <div class="second_block relative bloc">
-            <div class="second_block_1 border_left border_top absolute"></div>
-            <div class="second_block_2 border_left border_top absolute"></div>
-        </div>
-
-        <!-- Ligne 3 -->
-
-        <div class="second_block relative bloc">
-            <div class="second_block_1 border_left border_top absolute"></div>
-            <div class="second_block_2 border_left border_top absolute"></div>
-        </div>
-
-        <div class="first_block bloc">
-            <div class="first_block_1 border_right border_left"></div>
-        </div>
-
-        <div class="second_block relative bloc bon_angle_270">
-            <div class="second_block_1 border_left border_top absolute"></div>
-            <div class="second_block_2 border_left border_top absolute"></div>
-        </div>
-
-        <div class="first_block bloc bon_angle_90_270">
-            <div class="first_block_1 border_right border_left"></div>
-        </div>
-
-        <div class="third_block relative bloc bon_angle_90_180">
-            <div class="third_block_1"></div>
-            <div class="third_block_2 border_left border_bottom absolute"></div>
-            <div class="third_block_3 border_left border_top absolute"></div>
-        </div>
-
-        <div class="first_block bloc">
-            <div class="first_block_1 border_right border_left"></div>
-        </div>
-
-        <div class="second_block relative bloc">
-            <div class="second_block_1 border_left border_top absolute"></div>
-            <div class="second_block_2 border_left border_top absolute"></div>
-        </div>
-
-        <div class="first_block bloc">
-            <div class="first_block_1 border_right border_left"></div>
-        </div>
-
-        <div class="second_block relative bloc">
-            <div class="second_block_1 border_left border_top absolute"></div>
-            <div class="second_block_2 border_left border_top absolute"></div>
-        </div>
-
-        <div class="first_block bloc">
-            <div class="first_block_1 border_right border_left"></div>
-        </div>
-
-        <!-- Ligne 4 -->
-
-        <div class="second_block relative bloc">
-            <div class="second_block_1 border_left border_top absolute"></div>
-            <div class="second_block_2 border_left border_top absolute"></div>
-        </div>
-
-        <div class="first_block bloc">
-            <div class="first_block_1 border_right border_left"></div>
-        </div>
-
-        <div class="first_block bloc">
-            <div class="first_block_1 border_right border_left"></div>
-        </div>
-
-        <div class="first_block bloc">
-            <div class="first_block_1 border_right border_left"></div>
-        </div>
-
-        <div class="first_block bloc bon_angle_0_180">
-            <div class="first_block_1 border_right border_left"></div>
-        </div>
-
-        <div class="second_block relative bloc">
-            <div class="second_block_1 border_left border_top absolute"></div>
-            <div class="second_block_2 border_left border_top absolute"></div>
-        </div>
-
-        <div class="first_block bloc">
-            <div class="first_block_1 border_right border_left"></div>
-        </div>
-
-        <div class="first_block bloc">
-            <div class="first_block_1 border_right border_left"></div>
-        </div>
-
-        <div class="second_block relative bloc">
-            <div class="second_block_1 border_left border_top absolute"></div>
-            <div class="second_block_2 border_left border_top absolute"></div>
-        </div>
-
-        <div class="first_block bloc">
-            <div class="first_block_1 border_right border_left"></div>
-        </div>
-
-        <!-- Ligne 5 -->
-
-        <div class="first_block bloc">
-            <div class="first_block_1 border_right border_left"></div>
-        </div>
-
-        <div class="second_block relative bloc">
-            <div class="second_block_1 border_left border_top absolute"></div>
-            <div class="second_block_2 border_left border_top absolute"></div>
-        </div>
-
-        <div class="first_block bloc">
-            <div class="first_block_1 border_right border_left"></div>
-        </div>
-
-        <div class="third_block relative bloc bon_angle_0_90">
-            <div class="third_block_1"></div>
-            <div class="third_block_2 border_left border_bottom absolute"></div>
-            <div class="third_block_3 border_left border_top absolute"></div>
-        </div>
-
-        <div class="second_block relative bloc bon_angle_180">
-            <div class="second_block_1 border_left border_top absolute"></div>
-            <div class="second_block_2 border_left border_top absolute"></div>
-        </div>
-
-        <div class="first_block bloc">
-            <div class="first_block_1 border_right border_left"></div>
-        </div>
-
-        <div class="first_block bloc">
-            <div class="first_block_1 border_right border_left"></div>
-        </div>
-
-        <div class="second_block relative bloc">
-            <div class="second_block_1 border_left border_top absolute"></div>
-            <div class="second_block_2 border_left border_top absolute"></div>
-        </div>
-
-        <div class="first_block bloc">
-            <div class="first_block_1 border_right border_left"></div>
-        </div>
-
-        <div class="second_block relative bloc">
-            <div class="second_block_1 border_left border_top absolute"></div>
-            <div class="second_block_2 border_left border_top absolute"></div>
-        </div>
-
-        <!-- Ligne 6 -->
+            <!-- Ligne 1 -->
+            <!-- start -->
+            <div class="second_block relative start">
+                <div class="second_block_1 border_left border_top absolute"></div>
+                <div class="second_block_2 border_left border_top absolute"></div>
+            </div>
+
+            <div class="obstacle">
+                <img src="./gilet_jaune.png">
+            </div>
+
+            <div class="second_block relative bloc bon_angle_0">
+                <div class="second_block_1 border_left border_top absolute"></div>
+                <div class="second_block_2 border_left border_top absolute"></div>
+            </div>
+
+            <div class="second_block relative bloc bon_angle_90">
+                <div class="second_block_1 border_left border_top absolute"></div>
+                <div class="second_block_2 border_left border_top absolute"></div>
+            </div>
+
+            <div class="second_block relative bloc">
+                <div class="second_block_1 border_left border_top absolute"></div>
+                <div class="second_block_2 border_left border_top absolute"></div>
+            </div>
+
+            <div class="first_block bloc">
+                <div class="first_block_1 border_right border_left"></div>
+            </div>
+
+            <div class="obstacle">
+                <img src="./gilet_jaune.png">
+            </div>
+
+            <div class="first_block bloc">
+                <div class="first_block_1 border_right border_left"></div>
+            </div>
+
+            <div class="first_block bloc">
+                <div class="first_block_1 border_right border_left"></div>
+            </div>
+
+            <div class="third_block relative bloc">
+                <div class="third_block_1"></div>
+                <div class="third_block_2 border_left border_bottom absolute"></div>
+                <div class="third_block_3 border_left border_top absolute"></div>
+            </div>
+
+            <!-- Ligne 2 -->
+
+            <div class="second_block relative bloc bon_angle_270">
+                <div class="second_block_1 border_left border_top absolute"></div>
+                <div class="second_block_2 border_left border_top absolute"></div>
+            </div>
+
+            <div class="first_block bloc bon_angle_90_270">
+                <div class="first_block_1 border_right border_left"></div>
+            </div>
+
+            <div class="second_block relative bloc bon_angle_180">
+                <div class="second_block_1 border_left border_top absolute"></div>
+                <div class="second_block_2 border_left border_top absolute"></div>
+            </div>
+
+            <div class="first_block bloc bon_angle_0_180">
+                <div class="first_block_1 border_right border_left"></div>
+            </div>
+
+            <div class="first_block bloc">
+                <div class="first_block_1 border_right border_left"></div>
+            </div>
+
+            <div class="first_block bloc">
+                <div class="first_block_1 border_right border_left"></div>
+            </div>
+
+            <div class="second_block relative bloc">
+                <div class="second_block_1 border_left border_top absolute"></div>
+                <div class="second_block_2 border_left border_top absolute"></div>
+            </div>
+
+            <div class="first_block bloc">
+                <div class="first_block_1 border_right border_left"></div>
+            </div>
+
+            <div class="second_block relative bloc">
+                <div class="second_block_1 border_left border_top absolute"></div>
+                <div class="second_block_2 border_left border_top absolute"></div>
+            </div>
+
+            <div class="second_block relative bloc">
+                <div class="second_block_1 border_left border_top absolute"></div>
+                <div class="second_block_2 border_left border_top absolute"></div>
+            </div>
+
+            <!-- Ligne 3 -->
+
+            <div class="obstacle">
+                <img src="./gilet_jaune.png">
+            </div>
+
+            <div class="first_block bloc">
+                <div class="first_block_1 border_right border_left"></div>
+            </div>
+
+            <div class="second_block relative bloc">
+                <div class="second_block_1 border_left border_top absolute"></div>
+                <div class="second_block_2 border_left border_top absolute"></div>
+            </div>
+
+            <div class="second_block relative bloc bon_angle_270">
+                <div class="second_block_1 border_left border_top absolute"></div>
+                <div class="second_block_2 border_left border_top absolute"></div>
+            </div>
+
+            <div class="second_block relative bloc bon_angle_90">
+                <div class="second_block_1 border_left border_top absolute"></div>
+                <div class="second_block_2 border_left border_top absolute"></div>
+            </div>
+
+            <div class="first_block bloc">
+                <div class="first_block_1 border_right border_left"></div>
+            </div>
+
+            <div class="obstacle">
+                <img src="./gilet_jaune.png">
+            </div>
+
+            <div class="second_block relative bloc">
+                <div class="second_block_1 border_left border_top absolute"></div>
+                <div class="second_block_2 border_left border_top absolute"></div>
+            </div>
+
+            <div class="first_block bloc">
+                <div class="first_block_1 border_right border_left"></div>
+            </div>
+
+            <div class="first_block bloc">
+                <div class="first_block_1 border_right border_left"></div>
+            </div>
+
+            <!-- Ligne 4 -->
+
+            <div class="second_block relative bloc">
+                <div class="second_block_1 border_left border_top absolute"></div>
+                <div class="second_block_2 border_left border_top absolute"></div>
+            </div>
+
+            <div class="second_block relative bloc">
+                <div class="second_block_1 border_left border_top absolute"></div>
+                <div class="second_block_2 border_left border_top absolute"></div>
+            </div>
+
+            <div class="obstacle">
+                <img src="./gilet_jaune.png">
+            </div>
+
+            <div class="second_block relative bloc bon_angle_0">
+                <div class="second_block_1 border_left border_top absolute"></div>
+                <div class="second_block_2 border_left border_top absolute"></div>
+            </div>
+
+            <div class="second_block relative bloc bon_angle_180">
+                <div class="second_block_1 border_left border_top absolute"></div>
+                <div class="second_block_2 border_left border_top absolute"></div>
+            </div>
+
+            <div class="second_block relative bloc">
+                <div class="second_block_1 border_left border_top absolute"></div>
+                <div class="second_block_2 border_left border_top absolute"></div>
+            </div>
+
+            <div class="first_block bloc">
+                <div class="first_block_1 border_right border_left"></div>
+            </div>
+
+            <div class="first_block bloc">
+                <div class="first_block_1 border_right border_left"></div>
+            </div>
+
+            <div class="second_block relative bloc">
+                <div class="second_block_1 border_left border_top absolute"></div>
+                <div class="second_block_2 border_left border_top absolute"></div>
+            </div>
+
+            <div class="second_block relative bloc">
+                <div class="second_block_1 border_left border_top absolute"></div>
+                <div class="second_block_2 border_left border_top absolute"></div>
+            </div>
+
+            <!-- Ligne 5 -->
+
+            <div class="first_block bloc">
+                <div class="first_block_1 border_right border_left"></div>
+            </div>
+
+            <div class="first_block bloc">
+                <div class="first_block_1 border_right border_left"></div>
+            </div>
+
+            <div class="second_block relative bloc">
+                <div class="second_block_1 border_left border_top absolute"></div>
+                <div class="second_block_2 border_left border_top absolute"></div>
+            </div>
+
+            <div class="second_block relative bloc bon_angle_270">
+                <div class="second_block_1 border_left border_top absolute"></div>
+                <div class="second_block_2 border_left border_top absolute"></div>
+            </div>
+
+            <div class="second_block relative bloc bon_angle_90">
+                <div class="second_block_1 border_left border_top absolute"></div>
+                <div class="second_block_2 border_left border_top absolute"></div>
+            </div>
+
+            <div class="first_block bloc">
+                <div class="first_block_1 border_right border_left"></div>
+            </div>
+
+            <div class="first_block bloc">
+                <div class="first_block_1 border_right border_left"></div>
+            </div>
+
+            <div class="obstacle">
+                <img src="./gilet_jaune.png">
+            </div>
+
+            <div class="first_block bloc">
+                <div class="first_block_1 border_right border_left"></div>
+            </div>
+
+            <div class="obstacle">
+                <img src="./gilet_jaune.png">
+            </div>
+
+            <!-- Ligne 6 -->
+
+            <div class="first_block bloc">
+                <div class="first_block_1 border_right border_left"></div>
+            </div>
+
+            <div class="first_block bloc">
+                <div class="first_block_1 border_right border_left"></div>
+            </div>
+
+            <div class="first_block bloc">
+                <div class="first_block_1 border_right border_left"></div>
+            </div>
+
+            <div class="second_block relative bloc">
+                <div class="second_block_1 border_left border_top absolute"></div>
+                <div class="second_block_2 border_left border_top absolute"></div>
+            </div>
+
+            <div class="first_block bloc bon_angle_0_180">
+                <div class="first_block_1 border_right border_left"></div>
+            </div>
+
+            <div class="obstacle">
+                <img src="./gilet_jaune.png">
+            </div>
+
+            <div class="first_block bloc">
+                <div class="first_block_1 border_right border_left"></div>
+            </div>
+
+            <div class="second_block relative bloc">
+                <div class="second_block_1 border_left border_top absolute"></div>
+                <div class="second_block_2 border_left border_top absolute"></div>
+            </div>
+
+            <div class="first_block bloc">
+                <div class="first_block_1 border_right border_left"></div>
+            </div>
+
+            <div class="first_block bloc">
+                <div class="first_block_1 border_right border_left"></div>
+            </div>
+
+            <!-- Ligne 7 -->
+
+            <div class="first_block bloc">
+                <div class="first_block_1 border_right border_left"></div>
+            </div>
+
+            <div class="second_block relative bloc">
+                <div class="second_block_1 border_left border_top absolute"></div>
+                <div class="second_block_2 border_left border_top absolute"></div>
+            </div>
+
+            <div class="second_block relative bloc">
+                <div class="second_block_1 border_left border_top absolute"></div>
+                <div class="second_block_2 border_left border_top absolute"></div>
+            </div>
+
+            <div class="first_block bloc">
+                <div class="first_block_1 border_right border_left"></div>
+            </div>
+
+            <div class="first_block bloc bon_angle_0_180">
+                <div class="first_block_1 border_right border_left"></div>
+            </div>
+
+            <div class="obstacle">
+                <img src="./gilet_jaune.png">
+            </div>
+
+            <div class="first_block bloc">
+                <div class="first_block_1 border_right border_left"></div>
+            </div>
+
+            <div class="second_block relative bloc bon_angle_0">
+                <div class="second_block_1 border_left border_top absolute"></div>
+                <div class="second_block_2 border_left border_top absolute"></div>
+            </div>
+
+            <div class="first_block bloc bon_angle_90_270">
+                <div class="first_block_1 border_right border_left"></div>
+            </div>
+
+            <div class="second_block relative bloc bon_angle_90">
+                <div class="second_block_1 border_left border_top absolute"></div>
+                <div class="second_block_2 border_left border_top absolute"></div>
+            </div>
+
+
+            <!-- Ligne 8 -->
+
+            <div class="first_block bloc">
+                <div class="first_block_1 border_right border_left"></div>
+            </div>
+
+            <div class="first_block bloc">
+                <div class="first_block_1 border_right border_left"></div>
+            </div>
+
+            <div class="first_block bloc">
+                <div class="first_block_1 border_right border_left"></div>
+            </div>
+
+            <div class="second_block relative bloc">
+                <div class="second_block_1 border_left border_top absolute"></div>
+                <div class="second_block_2 border_left border_top absolute"></div>
+            </div>
+
+            <div class="first_block bloc bon_angle_0_180">
+                <div class="first_block_1 border_right border_left"></div>
+            </div>
+
+            <div class="first_block bloc">
+                <div class="first_block_1 border_right border_left"></div>
+            </div>
+
+            <div class="second_block relative bloc">
+                <div class="second_block_1 border_left border_top absolute"></div>
+                <div class="second_block_2 border_left border_top absolute"></div>
+            </div>
+
+            <div class="first_block bloc bon_angle_0_180">
+                <div class="first_block_1 border_right border_left"></div>
+            </div>
+
+            <div class="second_block relative bloc bon_angle_0">
+                <div class="second_block_1 border_left border_top absolute"></div>
+                <div class="second_block_2 border_left border_top absolute"></div>
+            </div>
+
+            <div class="second_block relative bloc bon_angle_180">
+                <div class="second_block_1 border_left border_top absolute"></div>
+                <div class="second_block_2 border_left border_top absolute"></div>
+            </div>
+
+
+            <!-- Ligne 9 -->
+
+            <div class="obstacle">
+                <img src="./gilet_jaune.png">
+            </div>
+
+            <div class="second_block relative bloc">
+                <div class="second_block_1 border_left border_top absolute"></div>
+                <div class="second_block_2 border_left border_top absolute"></div>
+            </div>
+
+            <div class="obstacle">
+                <img src="./gilet_jaune.png">
+            </div>
+
+            <div class="second_block relative bloc bon_angle_0">
+                <div class="second_block_1 border_left border_top absolute"></div>
+                <div class="second_block_2 border_left border_top absolute"></div>
+            </div>
+
+            <div class="second_block relative bloc bon_angle_180">
+                <div class="second_block_1 border_left border_top absolute"></div>
+                <div class="second_block_2 border_left border_top absolute"></div>
+            </div>
+
+            <div class="obstacle">
+                <img src="./gilet_jaune.png">
+            </div>
+
+            <div class="second_block relative bloc bon_angle_0">
+                <div class="second_block_1 border_left border_top absolute"></div>
+                <div class="second_block_2 border_left border_top absolute"></div>
+            </div>
+
+            <div class="second_block relative bloc bon_angle_180">
+                <div class="second_block_1 border_left border_top absolute"></div>
+                <div class="second_block_2 border_left border_top absolute"></div>
+            </div>
+
+            <div class="second_block relative bloc bon_angle_270">
+                <div class="second_block_1 border_left border_top absolute"></div>
+                <div class="second_block_2 border_left border_top absolute"></div>
+            </div>
+
+            <div class="second_block relative bloc bon_angle_90">
+                <div class="second_block_1 border_left border_top absolute"></div>
+                <div class="second_block_2 border_left border_top absolute"></div>
+            </div>
+
+
+            <!-- Ligne 10 -->
+
+            <div class="third_block relative bloc">
+                <div class="third_block_1"></div>
+                <div class="third_block_2 border_left border_bottom absolute"></div>
+                <div class="third_block_3 border_left border_top absolute"></div>
+            </div>
+
+            <div class="first_block bloc">
+                <div class="first_block_1 border_right border_left"></div>
+            </div>
+
+            <div class="second_block relative bloc">
+                <div class="second_block_1 border_left border_top absolute"></div>
+                <div class="second_block_2 border_left border_top absolute"></div>
+            </div>
+
+            <div class="second_block relative bloc bon_angle_270">
+                <div class="second_block_1 border_left border_top absolute"></div>
+                <div class="second_block_2 border_left border_top absolute"></div>
+            </div>
+
+            <div class="first_block bloc bon_angle_90_270">
+                <div class="first_block_1 border_right border_left"></div>
+            </div>
+
+            <div class="first_block bloc bon_angle_90_270">
+                <div class="first_block_1 border_right border_left"></div>
+            </div>
+
+            <div class="second_block relative bloc bon_angle_180">
+                <div class="second_block_1 border_left border_top absolute"></div>
+                <div class="second_block_2 border_left border_top absolute"></div>
+            </div>
+
+            <div class="first_block bloc">
+                <div class="first_block_1 border_right border_left"></div>
+            </div>
+
+            <div class="fourth_block relative bloc">
+                <div class="fourth_block_1 border_right border_bottom absolute"></div>
+                <div class="fourth_block_2 border_left border_bottom absolute"></div>
+                <div class="fourth_block_3 border_right border_top absolute"></div>
+                <div class="fourth_block_4 border_left border_top absolute"></div>
+            </div>
+
+
+            <!-- end -->
+            <div class="second_block relative end">
+                <div class="second_block_1 border_left border_top absolute"></div>
+                <div class="second_block_2 border_left border_top absolute"></div>
+            </div>
 
-        <div class="second_block relative bloc">
-            <div class="second_block_1 border_left border_top absolute"></div>
-            <div class="second_block_2 border_left border_top absolute"></div>
-        </div>
-
-        <div class="second_block relative bloc bon_angle_0">
-            <div class="second_block_1 border_left border_top absolute"></div>
-            <div class="second_block_2 border_left border_top absolute"></div>
-        </div>
-
-        <div class="third_block relative bloc bon_angle_90_270">
-            <div class="third_block_1"></div>
-            <div class="third_block_2 border_left border_bottom absolute"></div>
-            <div class="third_block_3 border_left border_top absolute"></div>
-        </div>
-
-        <div class="second_block relative bloc bon_angle_180">
-            <div class="second_block_1 border_left border_top absolute"></div>
-            <div class="second_block_2 border_left border_top absolute"></div>
-        </div>
-
-        <div class="first_block bloc">
-            <div class="first_block_1 border_right border_left"></div>
-        </div>
-
-        <div class="fourth_block relative bloc bon_angle_0_90_180_270">
-            <div class="fourth_block_1 border_right border_bottom absolute"></div>
-            <div class="fourth_block_2 border_left border_bottom absolute"></div>
-            <div class="fourth_block_3 border_right border_top absolute"></div>
-            <div class="fourth_block_4 border_left border_top absolute"></div>
-        </div>
-
-        <div class="first_block bloc bon_angle_90_270">
-            <div class="first_block_1 border_right border_left"></div>
-        </div>
-
-        <div class="third_block relative bloc bon_angle_90_270">
-            <div class="third_block_1"></div>
-            <div class="third_block_2 border_left border_bottom absolute"></div>
-            <div class="third_block_3 border_left border_top absolute"></div>
-        </div>
-
-        <div class="second_block relative bloc bon_angle_90">
-            <div class="second_block_1 border_left border_top absolute"></div>
-            <div class="second_block_2 border_left border_top absolute"></div>
-        </div>
-
-        <div class="second_block relative bloc">
-            <div class="second_block_1 border_left border_top absolute"></div>
-            <div class="second_block_2 border_left border_top absolute"></div>
-        </div>
-
-        <!-- Ligne 7 -->
-
-        <div class="first_block bloc">
-            <div class="first_block_1 border_right border_left"></div>
-        </div>
-
-        <div class="first_block bloc bon_angle_0_180">
-            <div class="first_block_1 border_right border_left"></div>
-        </div>
-
-        <div class="first_block bloc">
-            <div class="first_block_1 border_right border_left"></div>
-        </div>
-
-        <div class="first_block bloc">
-            <div class="first_block_1 border_right border_left"></div>
-        </div>
-
-        <div class="third_block relative bloc bon_angle_0_90">
-            <div class="third_block_1"></div>
-            <div class="third_block_2 border_left border_bottom absolute"></div>
-            <div class="third_block_3 border_left border_top absolute"></div>
-        </div>
-
-        <div class="second_block relative bloc bon_angle_180">
-            <div class="second_block_1 border_left border_top absolute"></div>
-            <div class="second_block_2 border_left border_top absolute"></div>
-        </div>
-
-        <div class="first_block bloc">
-            <div class="first_block_1 border_right border_left"></div>
-        </div>
-
-        <div class="second_block relative bloc bon_angle_0">
-            <div class="second_block_1 border_left border_top absolute"></div>
-            <div class="second_block_2 border_left border_top absolute"></div>
-        </div>
-
-        <div class="third_block relative bloc bon_angle_180_270">
-            <div class="third_block_1"></div>
-            <div class="third_block_2 border_left border_bottom absolute"></div>
-            <div class="third_block_3 border_left border_top absolute"></div>
-        </div>
-
-        <div class="third_block relative bloc">
-            <div class="third_block_1"></div>
-            <div class="third_block_2 border_left border_bottom absolute"></div>
-            <div class="third_block_3 border_left border_top absolute"></div>
-        </div>
-
-
-        <!-- Ligne 8 -->
-
-        <div class="second_block relative bloc">
-            <div class="second_block_1 border_left border_top absolute"></div>
-            <div class="second_block_2 border_left border_top absolute"></div>
-        </div>
-
-        <div class="first_block bloc bon_angle_0_180">
-            <div class="first_block_1 border_right border_left"></div>
-        </div>
-
-        <div class="second_block relative bloc">
-            <div class="second_block_1 border_left border_top absolute"></div>
-            <div class="second_block_2 border_left border_top absolute"></div>
-        </div>
-
-        <div class="first_block bloc">
-            <div class="first_block_1 border_right border_left"></div>
-        </div>
-
-        <div class="first_block bloc bon_angle_0_180">
-            <div class="first_block_1 border_right border_left"></div>
-        </div>
 
-        <div class="first_block bloc">
-            <div class="first_block_1 border_right border_left"></div>
         </div>
-
-        <div class="fourth_block relative bloc">
-            <div class="fourth_block_1 border_right border_bottom absolute"></div>
-            <div class="fourth_block_2 border_left border_bottom absolute"></div>
-            <div class="fourth_block_3 border_right border_top absolute"></div>
-            <div class="fourth_block_4 border_left border_top absolute"></div>
-        </div>
-
-        <div class="first_block bloc bon_angle_0_180">
-            <div class="first_block_1 border_right border_left"></div>
-        </div>
-
-        <div class="first_block bloc">
-            <div class="first_block_1 border_right border_left"></div>
-        </div>
-
-        <div class="first_block bloc">
-            <div class="first_block_1 border_right border_left"></div>
-        </div>
-
-
-        <!-- Ligne 9 -->
-
-        <div class="second_block relative bloc">
-            <div class="second_block_1 border_left border_top absolute"></div>
-            <div class="second_block_2 border_left border_top absolute"></div>
-        </div>
-
-        <div class="first_block bloc bon_angle_0_180">
-            <div class="first_block_1 border_right border_left"></div>
-        </div>
-
-        <div class="first_block bloc">
-            <div class="first_block_1 border_right border_left"></div>
-        </div>
-
-        <div class="second_block relative bloc bon_angle_0">
-            <div class="second_block_1 border_left border_top absolute"></div>
-            <div class="second_block_2 border_left border_top absolute"></div>
-        </div>
-
-        <div class="second_block relative bloc bon_angle_180">
-            <div class="second_block_1 border_left border_top absolute"></div>
-            <div class="second_block_2 border_left border_top absolute"></div>
-        </div>
-
-        <div class="first_block bloc">
-            <div class="first_block_1 border_right border_left"></div>
-        </div>
-
-        <div class="second_block relative bloc">
-            <div class="second_block_1 border_left border_top absolute"></div>
-            <div class="second_block_2 border_left border_top absolute"></div>
-        </div>
-
-        <div class="third_block relative bloc bon_angle_0_270">
-            <div class="third_block_1"></div>
-            <div class="third_block_2 border_left border_bottom absolute"></div>
-            <div class="third_block_3 border_left border_top absolute"></div>
-        </div>
-
-        <div class="first_block bloc bon_angle_90_270">
-            <div class="first_block_1 border_right border_left"></div>
-        </div>
-
-        <div class="second_block relative bloc bon_angle_90">
-            <div class="second_block_1 border_left border_top absolute"></div>
-            <div class="second_block_2 border_left border_top absolute"></div>
-        </div>
-
-        <!-- Ligne 10 -->
-
-        <div class="second_block relative bloc">
-            <div class="second_block_1 border_left border_top absolute"></div>
-            <div class="second_block_2 border_left border_top absolute"></div>
-        </div>
-
-        <div class="third_block relative bloc bon_angle_0_270">
-            <div class="third_block_1"></div>
-            <div class="third_block_2 border_left border_bottom absolute"></div>
-            <div class="third_block_3 border_left border_top absolute"></div>
-        </div>
-
-        <div class="first_block bloc bon_angle_90_270">
-            <div class="first_block_1 border_right border_left"></div>
-        </div>
-
-        <div class="third_block relative bloc bon_angle_180_270">
-            <div class="third_block_1"></div>
-            <div class="third_block_2 border_left border_bottom absolute"></div>
-            <div class="third_block_3 border_left border_top absolute"></div>
-        </div>
-
-        <div class="first_block bloc">
-            <div class="first_block_1 border_right border_left"></div>
-        </div>
-
-        <div class="third_block relative bloc">
-            <div class="third_block_1"></div>
-            <div class="third_block_2 border_left border_bottom absolute"></div>
-            <div class="third_block_3 border_left border_top absolute"></div>
-        </div>
-
-        <div class="second_block relative bloc">
-            <div class="second_block_1 border_left border_top absolute"></div>
-            <div class="second_block_2 border_left border_top absolute"></div>
-        </div>
-
-        <div class="third_block relative bloc">
-            <div class="third_block_1"></div>
-            <div class="third_block_2 border_left border_bottom absolute"></div>
-            <div class="third_block_3 border_left border_top absolute"></div>
-        </div>
-
-        <div class="second_block relative bloc">
-            <div class="second_block_1 border_left border_top absolute"></div>
-            <div class="second_block_2 border_left border_top absolute"></div>
-        </div>
-
-        <div class="second_block relative end">
-            <div class="second_block_1 border_left border_top absolute"></div>
-            <div class="second_block_2 border_left border_top absolute"></div>
-        </div>
-
-
     </div>
 
 
@@ -888,12 +938,6 @@
                     $(this).css('transform', 'matrix(-1.83697e-16, -1, 1, -1.83697e-16, 0, 0)');
                 });
 
-                // mise en couleur si angle = 0 ou 90
-                $('.bon_angle_0_90').each(function () {
-                    $(this).addClass('good_way');
-                    $(this).css('transform', 'matrix(1, 0, 0, 1, 0, 0)');
-                });
-
                 // mise en couleur si angle = 0 ou 180
                 $('.bon_angle_0_180').each(function () {
                     $(this).addClass('good_way');
@@ -906,27 +950,11 @@
                     $(this).css('transform', 'matrix(1, 0, 0, 1, 0, 0)');
                 });
 
-                // mise en couleur si angle = 90 ou 180
-                $('.bon_angle_90_180').each(function () {
-                    $(this).addClass('good_way');
-                    $(this).css('transform', 'matrix(6.12323e-17, 1, -1, 6.12323e-17, 0, 0)');
-                });
 
                 // mise en couleur si angle = 90 ou 270
                 $('.bon_angle_90_270').each(function () {
                     $(this).addClass('good_way');
                     $(this).css('transform', 'matrix(6.12323e-17, 1, -1, 6.12323e-17, 0, 0)');
-                });
-
-                // mise en couleur si angle = 180 ou 270
-                $('.bon_angle_180_270').each(function () {
-                    $(this).addClass('good_way');
-                    $(this).css('transform', 'matrix(-1, 1.22465e-16, -1.22465e-16, -1, 0, 0)');
-                });
-
-                // mise en couleur si angle = 0 ou 90 ou 180 ou 270
-                $('.bon_angle_0_90_180_270').each(function () {
-                    $(this).addClass('good_way');
                 });
 
                 $('.winner_pop_up').css('display', 'block');
@@ -937,6 +965,12 @@
             // Bouton pour fermer la pop up
             $('.close_pop_up').click(function () {
                 $('.winner_pop_up').css('display', 'none');
+            });
+
+            // Bouton pour fermer l'accueil et lancer le jeu
+            $('.close_synopsis').click(function () {
+                $('.accueil').css('display', 'none');
+                $('.all_content').css('display', 'block');
             });
         });
 
