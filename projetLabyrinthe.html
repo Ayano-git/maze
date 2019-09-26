@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <title>
+        Projet Labyrinthe
+    </title>
+    <style>
+        /* Général */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            height: 100%;
+            font-size: 1em;
+            line-height: 1.5;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+        }
+
+        /* Bordures */
+        .border_right {
+            border-right: solid 1px;
+        }
+
+        .border_left {
+            border-left: solid 1px;
+        }
+
+        .border_top {
+            border-top: solid 1px;
+        }
+
+        .border_bottom {
+            border-bottom: solid 1px;
+        }
+
+        /* Position */
+        .absolute {
+            position: absolute;
+        }
+
+        .relative {
+            position: relative;
+        }
+
+        /* Grille */
+        .grid {
+            position: absolute;
+            z-index: 900;
+            left: 50%;
+            top: 50%;
+            transform: translateY(-50%) translateX(-50%);
+            display: grid;
+            width: 500px;
+            grid-template-columns: repeat(10, 50px);
+            grid-template-rows: repeat(10, 50px);
+        }
+
+        /* Commun aux blocs */
+        .start {
+            background: #10ff00;
+            width: 50px;
+            height: 50px;
+            display: inline-block;
+            transform: rotate(90deg);
+        }
+
+        .bloc {
+            background: silver;
+            width: 50px;
+            height: 50px;
+            display: inline-block;
+            transform: rotate(0deg);
+            animation: transform 10s;
+        }
+
+        .end {
+            background: red;
+            width: 50px;
+            height: 50px;
+            display: inline-block;
+            transform: rotate(270deg);
+        }
+
+        /* Premier bloc --- goutière simple */
+        .first_block_1 {
+            width: 12px;
+            margin: auto;
+            min-height: 100%;
+        }
+
+        /* Second bloc --- goutière coin */
+        .second_block_1 {
+            width: 31px;
+            height: 31px;
+            bottom: 0;
+            right: 0;
+        }
+
+        .second_block_2 {
+            width: 20px;
+            height: 20px;
+            bottom: 0;
+            right: 0;
+        }
+
+        /* Troisième bloc --- goutière 3 sorties */
+        .third_block_1 {
+            width: 1px;
+            min-height: 100%;
+            background: black;
+            margin-left: 19px;
+        }
+
+        .third_block_2 {
+            width: 20px;
+            height: 20px;
+            top: 0;
+            right: 0;
+        }
+
+        .third_block_3 {
+            width: 20px;
+            height: 20px;
+            bottom: 0;
+            right: 0;
+        }
+
+        /* Quatrième bloc --- goutière 4 sorties */
+        .fourth_block_1 {
+            top: 0;
+            left: 0;
+            width: 20px;
+            height: 20px;
+        }
+
+        .fourth_block_2 {
+            width: 20px;
+            height: 20px;
+            top: 0;
+            right: 0;
+        }
+
+        .fourth_block_3 {
+            width: 20px;
+            height: 20px;
+            bottom: 0;
+            left: 0;
+        }
+
+        .fourth_block_4 {
+            width: 20px;
+            height: 20px;
+            bottom: 0;
+            right: 0;
+        }
+
+        /* Solution Utilisateur */
+
+        .user_way {
+            background: skyblue;
+        }
+
+        /* Bonne solution */
+
+        .good_way {
+            background: #10ff00;
+        }
+
+        /* Bouton Reset */
+
+        .buttons_group {
+            margin-top: 20px;
+            margin-left: 50px;
+            float: left;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+
+        .buttons {
+            background: silver;
+            border: none;
+            border-radius: 5px;
+            padding: 10 30px;
+            font-size: 1.2em;
+        }
+
+        .winner_pop_up {
+
+            display: none;
+            position: absolute;
+            z-index: 999;
+            left: 50%;
+            top: 50%;
+            transform: translateY(-50%) translateX(-50%);
+            background: #00e5ff;
+            padding: 20px;
+            font-weight: bold;
+            font-size: 1.2em;
+            text-align: center;
+            border-radius: 5px;
+        }
+
+        .close_pop_up {
+            background: blue;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+        }
+
+        /* Code couleur */
+        .color_meaning {
+            margin-top: 20px;
+        }
+
+        .color_meaning_block {
+            padding: 50px;
+            text-align: center;
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+
+        .red {
+            background: red
+        }
+
+        .green {
+            background: #10ff00;
+        }
+
+        .blue {
+            background: #00e5ff;
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <div class="winner_pop_up">
+        <p>
+            Hey you ! Did you just succeed to get out of the maze ?!!
+        </p>
+        <p>
+            You're awsome !!!
+        </p>
+        <p>
+            If you think that you have found a different way tell it to my master ;)
+        </p>
+        <button class="close_pop_up"> Click on me to close this window :) </button>
+
+    </div>
+
+    <div class="buttons_group">
+        <button class="reset_button buttons">
+            Reset
+        </button>
+        <button class="solution_button buttons">
+            Show solution
+        </button>
+        <div class="color_meaning">
+            <div class="green color_meaning_block">
+                Entry
+            </div>
+            <div class="blue color_meaning_block">
+                Your way
+            </div>
+            <div class="red color_meaning_block">
+                Exit
+            </div>
+        </div>
+    </div>
+
+    <div class="grid">
+
+        <!-- Premier bloc --- goutière simple
+
+        <div class="first_block bloc">
+            <div class="first_block_1 border_right border_left"></div>
+        </div> 
+        
+        -->
+
+
+        <!-- Second bloc --- goutière coin
+        <div class="second_block relative bloc">
+            <div class="second_block_1 border_left border_top absolute"></div>
+            <div class="second_block_2 border_left border_top absolute"></div>
+        </div> 
+    -->
+
+        <!-- Troisième bloc --- goutière 3 sorties
+        <div class="third_block relative bloc">
+            <div class="third_block_1"></div>
+            <div class="third_block_2 border_left border_bottom absolute"></div>
+            <div class="third_block_3 border_left border_top absolute"></div>
+        </div> 
+    -->
+
+        <!-- Quatrième bloc --- goutière 4 sorties
+        <div class="fourth_block relative bloc">
+            <div class="fourth_block_1 border_right border_bottom absolute"></div>
+            <div class="fourth_block_2 border_left border_bottom absolute"></div>
+            <div class="fourth_block_3 border_right border_top absolute"></div>
+            <div class="fourth_block_4 border_left border_top absolute"></div>
+        </div> 
+    -->
+
+
+        <!-- Ligne 1 -->
+
+        <div class="second_block relative start">
+            <div class="second_block_1 border_left border_top absolute"></div>
+            <div class="second_block_2 border_left border_top absolute"></div>
+        </div>
+
+        <div class="first_block bloc">
+            <div class="first_block_1 border_right border_left"></div>
+        </div>
+
+        <div class="third_block relative bloc">
+            <div class="third_block_1"></div>
+            <div class="third_block_2 border_left border_bottom absolute"></div>
+            <div class="third_block_3 border_left border_top absolute"></div>
+        </div>
+
+        <div class="second_block relative bloc">
+            <div class="second_block_1 border_left border_top absolute"></div>
+            <div class="second_block_2 border_left border_top absolute"></div>
+        </div>
+
+        <div class="first_block bloc">
+            <div class="first_block_1 border_right border_left"></div>
+        </div>
+
+        <div class="first_block bloc">
+            <div class="first_block_1 border_right border_left"></div>
+        </div>
+
+        <div class="second_block relative bloc">
+            <div class="second_block_1 border_left border_top absolute"></div>
+            <div class="second_block_2 border_left border_top absolute"></div>
+        </div>
+
+        <div class="first_block bloc">
+            <div class="first_block_1 border_right border_left"></div>
+        </div>
+
+        <div class="first_block bloc">
+            <div class="first_block_1 border_right border_left"></div>
+        </div>
+
+        <div class="second_block relative bloc">
+            <div class="second_block_1 border_left border_top absolute"></div>
+            <div class="second_block_2 border_left border_top absolute"></div>
+        </div>
+
+        <!-- Ligne 2 -->
+
+        <div class="third_block relative bloc bon_angle_0_270">
+            <div class="third_block_1"></div>
+            <div class="third_block_2 border_left border_bottom absolute"></div>
+            <div class="third_block_3 border_left border_top absolute"></div>
+        </div>
+
+        <div class="first_block bloc bon_angle_90_270">
+            <div class="first_block_1 border_right border_left"></div>
+        </div>
+
+        <div class="third_block relative bloc bon_angle_90_180">
+            <div class="third_block_1"></div>
+            <div class="third_block_2 border_left border_bottom absolute"></div>
+            <div class="third_block_3 border_left border_top absolute"></div>
+        </div>
+
+        <div class="first_block bloc">
+            <div class="first_block_1 border_right border_left"></div>
+        </div>
+
+        <div class="first_block bloc">
+            <div class="first_block_1 border_right border_left"></div>
+        </div>
+
+        <div class="first_block bloc">
+            <div class="first_block_1 border_right border_left"></div>
+        </div>
+
+        <div class="first_block bloc">
+            <div class="first_block_1 border_right border_left"></div>
+        </div>
+
+        <div class="first_block bloc">
+            <div class="first_block_1 border_right border_left"></div>
+        </div>
+
+        <div class="first_block bloc">
+            <div class="first_block_1 border_right border_left"></div>
+        </div>
+
+        <div class="second_block relative bloc">
+            <div class="second_block_1 border_left border_top absolute"></div>
+            <div class="second_block_2 border_left border_top absolute"></div>
+        </div>
+
+        <!-- Ligne 3 -->
+
+        <div class="second_block relative bloc">
+            <div class="second_block_1 border_left border_top absolute"></div>
+            <div class="second_block_2 border_left border_top absolute"></div>
+        </div>
+
+        <div class="first_block bloc">
+            <div class="first_block_1 border_right border_left"></div>
+        </div>
+
+        <div class="second_block relative bloc bon_angle_270">
+            <div class="second_block_1 border_left border_top absolute"></div>
+            <div class="second_block_2 border_left border_top absolute"></div>
+        </div>
+
+        <div class="first_block bloc bon_angle_90_270">
+            <div class="first_block_1 border_right border_left"></div>
+        </div>
+
+        <div class="third_block relative bloc bon_angle_90_180">
+            <div class="third_block_1"></div>
+            <div class="third_block_2 border_left border_bottom absolute"></div>
+            <div class="third_block_3 border_left border_top absolute"></div>
+        </div>
+
+        <div class="first_block bloc">
+            <div class="first_block_1 border_right border_left"></div>
+        </div>
+
+        <div class="second_block relative bloc">
+            <div class="second_block_1 border_left border_top absolute"></div>
+            <div class="second_block_2 border_left border_top absolute"></div>
+        </div>
+
+        <div class="first_block bloc">
+            <div class="first_block_1 border_right border_left"></div>
+        </div>
+
+        <div class="second_block relative bloc">
+            <div class="second_block_1 border_left border_top absolute"></div>
+            <div class="second_block_2 border_left border_top absolute"></div>
+        </div>
+
+        <div class="first_block bloc">
+            <div class="first_block_1 border_right border_left"></div>
+        </div>
+
+        <!-- Ligne 4 -->
+
+        <div class="second_block relative bloc">
+            <div class="second_block_1 border_left border_top absolute"></div>
+            <div class="second_block_2 border_left border_top absolute"></div>
+        </div>
+
+        <div class="first_block bloc">
+            <div class="first_block_1 border_right border_left"></div>
+        </div>
+
+        <div class="first_block bloc">
+            <div class="first_block_1 border_right border_left"></div>
+        </div>
+
+        <div class="first_block bloc">
+            <div class="first_block_1 border_right border_left"></div>
+        </div>
+
+        <div class="first_block bloc bon_angle_0_180">
+            <div class="first_block_1 border_right border_left"></div>
+        </div>
+
+        <div class="second_block relative bloc">
+            <div class="second_block_1 border_left border_top absolute"></div>
+            <div class="second_block_2 border_left border_top absolute"></div>
+        </div>
+
+        <div class="first_block bloc">
+            <div class="first_block_1 border_right border_left"></div>
+        </div>
+
+        <div class="first_block bloc">
+            <div class="first_block_1 border_right border_left"></div>
+        </div>
+
+        <div class="second_block relative bloc">
+            <div class="second_block_1 border_left border_top absolute"></div>
+            <div class="second_block_2 border_left border_top absolute"></div>
+        </div>
+
+        <div class="first_block bloc">
+            <div class="first_block_1 border_right border_left"></div>
+        </div>
+
+        <!-- Ligne 5 -->
+
+        <div class="first_block bloc">
+            <div class="first_block_1 border_right border_left"></div>
+        </div>
+
+        <div class="second_block relative bloc">
+            <div class="second_block_1 border_left border_top absolute"></div>
+            <div class="second_block_2 border_left border_top absolute"></div>
+        </div>
+
+        <div class="first_block bloc">
+            <div class="first_block_1 border_right border_left"></div>
+        </div>
+
+        <div class="third_block relative bloc bon_angle_0_90">
+            <div class="third_block_1"></div>
+            <div class="third_block_2 border_left border_bottom absolute"></div>
+            <div class="third_block_3 border_left border_top absolute"></div>
+        </div>
+
+        <div class="second_block relative bloc bon_angle_180">
+            <div class="second_block_1 border_left border_top absolute"></div>
+            <div class="second_block_2 border_left border_top absolute"></div>
+        </div>
+
+        <div class="first_block bloc">
+            <div class="first_block_1 border_right border_left"></div>
+        </div>
+
+        <div class="first_block bloc">
+            <div class="first_block_1 border_right border_left"></div>
+        </div>
+
+        <div class="second_block relative bloc">
+            <div class="second_block_1 border_left border_top absolute"></div>
+            <div class="second_block_2 border_left border_top absolute"></div>
+        </div>
+
+        <div class="first_block bloc">
+            <div class="first_block_1 border_right border_left"></div>
+        </div>
+
+        <div class="second_block relative bloc">
+            <div class="second_block_1 border_left border_top absolute"></div>
+            <div class="second_block_2 border_left border_top absolute"></div>
+        </div>
+
+        <!-- Ligne 6 -->
+
+        <div class="second_block relative bloc">
+            <div class="second_block_1 border_left border_top absolute"></div>
+            <div class="second_block_2 border_left border_top absolute"></div>
+        </div>
+
+        <div class="second_block relative bloc bon_angle_0">
+            <div class="second_block_1 border_left border_top absolute"></div>
+            <div class="second_block_2 border_left border_top absolute"></div>
+        </div>
+
+        <div class="third_block relative bloc bon_angle_90_270">
+            <div class="third_block_1"></div>
+            <div class="third_block_2 border_left border_bottom absolute"></div>
+            <div class="third_block_3 border_left border_top absolute"></div>
+        </div>
+
+        <div class="second_block relative bloc bon_angle_180">
+            <div class="second_block_1 border_left border_top absolute"></div>
+            <div class="second_block_2 border_left border_top absolute"></div>
+        </div>
+
+        <div class="first_block bloc">
+            <div class="first_block_1 border_right border_left"></div>
+        </div>
+
+        <div class="fourth_block relative bloc bon_angle_0_90_180_270">
+            <div class="fourth_block_1 border_right border_bottom absolute"></div>
+            <div class="fourth_block_2 border_left border_bottom absolute"></div>
+            <div class="fourth_block_3 border_right border_top absolute"></div>
+            <div class="fourth_block_4 border_left border_top absolute"></div>
+        </div>
+
+        <div class="first_block bloc bon_angle_90_270">
+            <div class="first_block_1 border_right border_left"></div>
+        </div>
+
+        <div class="third_block relative bloc bon_angle_90_270">
+            <div class="third_block_1"></div>
+            <div class="third_block_2 border_left border_bottom absolute"></div>
+            <div class="third_block_3 border_left border_top absolute"></div>
+        </div>
+
+        <div class="second_block relative bloc bon_angle_90">
+            <div class="second_block_1 border_left border_top absolute"></div>
+            <div class="second_block_2 border_left border_top absolute"></div>
+        </div>
+
+        <div class="second_block relative bloc">
+            <div class="second_block_1 border_left border_top absolute"></div>
+            <div class="second_block_2 border_left border_top absolute"></div>
+        </div>
+
+        <!-- Ligne 7 -->
+
+        <div class="first_block bloc">
+            <div class="first_block_1 border_right border_left"></div>
+        </div>
+
+        <div class="first_block bloc bon_angle_0_180">
+            <div class="first_block_1 border_right border_left"></div>
+        </div>
+
+        <div class="first_block bloc">
+            <div class="first_block_1 border_right border_left"></div>
+        </div>
+
+        <div class="first_block bloc">
+            <div class="first_block_1 border_right border_left"></div>
+        </div>
+
+        <div class="third_block relative bloc bon_angle_0_90">
+            <div class="third_block_1"></div>
+            <div class="third_block_2 border_left border_bottom absolute"></div>
+            <div class="third_block_3 border_left border_top absolute"></div>
+        </div>
+
+        <div class="second_block relative bloc bon_angle_180">
+            <div class="second_block_1 border_left border_top absolute"></div>
+            <div class="second_block_2 border_left border_top absolute"></div>
+        </div>
+
+        <div class="first_block bloc">
+            <div class="first_block_1 border_right border_left"></div>
+        </div>
+
+        <div class="second_block relative bloc bon_angle_0">
+            <div class="second_block_1 border_left border_top absolute"></div>
+            <div class="second_block_2 border_left border_top absolute"></div>
+        </div>
+
+        <div class="third_block relative bloc bon_angle_180_270">
+            <div class="third_block_1"></div>
+            <div class="third_block_2 border_left border_bottom absolute"></div>
+            <div class="third_block_3 border_left border_top absolute"></div>
+        </div>
+
+        <div class="third_block relative bloc">
+            <div class="third_block_1"></div>
+            <div class="third_block_2 border_left border_bottom absolute"></div>
+            <div class="third_block_3 border_left border_top absolute"></div>
+        </div>
+
+
+        <!-- Ligne 8 -->
+
+        <div class="second_block relative bloc">
+            <div class="second_block_1 border_left border_top absolute"></div>
+            <div class="second_block_2 border_left border_top absolute"></div>
+        </div>
+
+        <div class="first_block bloc bon_angle_0_180">
+            <div class="first_block_1 border_right border_left"></div>
+        </div>
+
+        <div class="second_block relative bloc">
+            <div class="second_block_1 border_left border_top absolute"></div>
+            <div class="second_block_2 border_left border_top absolute"></div>
+        </div>
+
+        <div class="first_block bloc">
+            <div class="first_block_1 border_right border_left"></div>
+        </div>
+
+        <div class="first_block bloc bon_angle_0_180">
+            <div class="first_block_1 border_right border_left"></div>
+        </div>
+
+        <div class="first_block bloc">
+            <div class="first_block_1 border_right border_left"></div>
+        </div>
+
+        <div class="fourth_block relative bloc">
+            <div class="fourth_block_1 border_right border_bottom absolute"></div>
+            <div class="fourth_block_2 border_left border_bottom absolute"></div>
+            <div class="fourth_block_3 border_right border_top absolute"></div>
+            <div class="fourth_block_4 border_left border_top absolute"></div>
+        </div>
+
+        <div class="first_block bloc bon_angle_0_180">
+            <div class="first_block_1 border_right border_left"></div>
+        </div>
+
+        <div class="first_block bloc">
+            <div class="first_block_1 border_right border_left"></div>
+        </div>
+
+        <div class="first_block bloc">
+            <div class="first_block_1 border_right border_left"></div>
+        </div>
+
+
+        <!-- Ligne 9 -->
+
+        <div class="second_block relative bloc">
+            <div class="second_block_1 border_left border_top absolute"></div>
+            <div class="second_block_2 border_left border_top absolute"></div>
+        </div>
+
+        <div class="first_block bloc bon_angle_0_180">
+            <div class="first_block_1 border_right border_left"></div>
+        </div>
+
+        <div class="first_block bloc">
+            <div class="first_block_1 border_right border_left"></div>
+        </div>
+
+        <div class="second_block relative bloc bon_angle_0">
+            <div class="second_block_1 border_left border_top absolute"></div>
+            <div class="second_block_2 border_left border_top absolute"></div>
+        </div>
+
+        <div class="second_block relative bloc bon_angle_180">
+            <div class="second_block_1 border_left border_top absolute"></div>
+            <div class="second_block_2 border_left border_top absolute"></div>
+        </div>
+
+        <div class="first_block bloc">
+            <div class="first_block_1 border_right border_left"></div>
+        </div>
+
+        <div class="second_block relative bloc">
+            <div class="second_block_1 border_left border_top absolute"></div>
+            <div class="second_block_2 border_left border_top absolute"></div>
+        </div>
+
+        <div class="third_block relative bloc bon_angle_0_270">
+            <div class="third_block_1"></div>
+            <div class="third_block_2 border_left border_bottom absolute"></div>
+            <div class="third_block_3 border_left border_top absolute"></div>
+        </div>
+
+        <div class="first_block bloc bon_angle_90_270">
+            <div class="first_block_1 border_right border_left"></div>
+        </div>
+
+        <div class="second_block relative bloc bon_angle_90">
+            <div class="second_block_1 border_left border_top absolute"></div>
+            <div class="second_block_2 border_left border_top absolute"></div>
+        </div>
+
+        <!-- Ligne 10 -->
+
+        <div class="second_block relative bloc">
+            <div class="second_block_1 border_left border_top absolute"></div>
+            <div class="second_block_2 border_left border_top absolute"></div>
+        </div>
+
+        <div class="third_block relative bloc bon_angle_0_270">
+            <div class="third_block_1"></div>
+            <div class="third_block_2 border_left border_bottom absolute"></div>
+            <div class="third_block_3 border_left border_top absolute"></div>
+        </div>
+
+        <div class="first_block bloc bon_angle_90_270">
+            <div class="first_block_1 border_right border_left"></div>
+        </div>
+
+        <div class="third_block relative bloc bon_angle_180_270">
+            <div class="third_block_1"></div>
+            <div class="third_block_2 border_left border_bottom absolute"></div>
+            <div class="third_block_3 border_left border_top absolute"></div>
+        </div>
+
+        <div class="first_block bloc">
+            <div class="first_block_1 border_right border_left"></div>
+        </div>
+
+        <div class="third_block relative bloc">
+            <div class="third_block_1"></div>
+            <div class="third_block_2 border_left border_bottom absolute"></div>
+            <div class="third_block_3 border_left border_top absolute"></div>
+        </div>
+
+        <div class="second_block relative bloc">
+            <div class="second_block_1 border_left border_top absolute"></div>
+            <div class="second_block_2 border_left border_top absolute"></div>
+        </div>
+
+        <div class="third_block relative bloc">
+            <div class="third_block_1"></div>
+            <div class="third_block_2 border_left border_bottom absolute"></div>
+            <div class="third_block_3 border_left border_top absolute"></div>
+        </div>
+
+        <div class="second_block relative bloc">
+            <div class="second_block_1 border_left border_top absolute"></div>
+            <div class="second_block_2 border_left border_top absolute"></div>
+        </div>
+
+        <div class="second_block relative end">
+            <div class="second_block_1 border_left border_top absolute"></div>
+            <div class="second_block_2 border_left border_top absolute"></div>
+        </div>
+
+
+    </div>
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            // Pour chacun des blocs (Rotation)
+            $('.bloc').each(function () {
+                // inclinaison aléatoire des blocs 
+                Array.prototype.random = function () {
+                    return this[Math.floor((Math.random() * this.length))];
+                }
+                var numbers = [0, 90, 180, 270];
+                var chosen_numbers = numbers.random(numbers.length);
+                $(this).css('transform', 'rotate(' + chosen_numbers + 'deg)');
+
+
+                // Rotation des blocs de 90°
+                var i = chosen_numbers + 90;
+                if (i == 360) {
+                    i = 0;
+                };
+
+                $(this).click(function () {
+                    $(this).css('transform', 'rotate(' + i + 'deg)')
+                    i += 90;
+                    // Traçage du chemin utilisateur
+                    $(this).addClass('user_way');
+                    if (i == 360) {
+                        i = 0;
+                    };
+                });
+            });
+
+
+            // Option reset pour retirer le chemin de l'utilisateur
+            $('.reset_button').click(function () {
+                $('.user_way').removeClass('user_way');
+                $('.good_way').removeClass('good_way');
+                $('.end').css('background', 'red');
+                $('.bloc').each(function () {
+
+                    Array.prototype.random = function () {
+                        return this[Math.floor((Math.random() * this.length))];
+                    }
+                    var numbers = [0, 90, 180, 270];
+                    var chosen_numbers = numbers.random(numbers.length);
+                    $(this).css('transform', 'rotate(' + chosen_numbers + 'deg)')
+                });
+            });
+
+
+            // Bouton montrant la bonne solution
+            $('.solution_button').click(function () {
+
+                // mise en couleur si angle = 0
+                $('.bon_angle_0').each(function () {
+                    $(this).addClass('good_way');
+                    $(this).css('transform', 'matrix(1, 0, 0, 1, 0, 0)');
+                });
+
+                // mise en couleur si angle = 90
+                $('.bon_angle_90').each(function () {
+                    $(this).addClass('good_way');
+                    $(this).css('transform', 'matrix(6.12323e-17, 1, -1, 6.12323e-17, 0, 0)');
+                });
+
+                // mise en couleur si angle = 180
+                $('.bon_angle_180').each(function () {
+                    $(this).addClass('good_way');
+                    $(this).css('transform', 'matrix(-1, 1.22465e-16, -1.22465e-16, -1, 0, 0)');
+                });
+
+                // mise en couleur si angle = 270
+                $('.bon_angle_270').each(function () {
+                    $(this).addClass('good_way');
+                    $(this).css('transform', 'matrix(-1.83697e-16, -1, 1, -1.83697e-16, 0, 0)');
+                });
+
+                // mise en couleur si angle = 0 ou 90
+                $('.bon_angle_0_90').each(function () {
+                    $(this).addClass('good_way');
+                    $(this).css('transform', 'matrix(1, 0, 0, 1, 0, 0)');
+                });
+
+                // mise en couleur si angle = 0 ou 180
+                $('.bon_angle_0_180').each(function () {
+                    $(this).addClass('good_way');
+                    $(this).css('transform', 'matrix(1, 0, 0, 1, 0, 0)');
+                });
+
+                // mise en couleur si angle = 0 ou 270
+                $('.bon_angle_0_270').each(function () {
+                    $(this).addClass('good_way');
+                    $(this).css('transform', 'matrix(1, 0, 0, 1, 0, 0)');
+                });
+
+                // mise en couleur si angle = 90 ou 180
+                $('.bon_angle_90_180').each(function () {
+                    $(this).addClass('good_way');
+                    $(this).css('transform', 'matrix(6.12323e-17, 1, -1, 6.12323e-17, 0, 0)');
+                });
+
+                // mise en couleur si angle = 90 ou 270
+                $('.bon_angle_90_270').each(function () {
+                    $(this).addClass('good_way');
+                    $(this).css('transform', 'matrix(6.12323e-17, 1, -1, 6.12323e-17, 0, 0)');
+                });
+
+                // mise en couleur si angle = 180 ou 270
+                $('.bon_angle_180_270').each(function () {
+                    $(this).addClass('good_way');
+                    $(this).css('transform', 'matrix(-1, 1.22465e-16, -1.22465e-16, -1, 0, 0)');
+                });
+
+                // mise en couleur si angle = 0 ou 90 ou 180 ou 270
+                $('.bon_angle_0_90_180_270').each(function () {
+                    $(this).addClass('good_way');
+                });
+
+                $('.winner_pop_up').css('display', 'block');
+                $('.end').css('background', '#10ff00');
+
+            });
+
+            // Bouton pour fermer la pop up
+            $('.close_pop_up').click(function () {
+                $('.winner_pop_up').css('display', 'none');
+            });
+        });
+
+    </script>
+</body>
+
+</html>
+
+<!-- 270° = matrix(-1.83697e-16, -1, 1, -1.83697e-16, 0, 0) -->
+<!-- 180 = matrix(-1, 1.22465e-16, -1.22465e-16, -1, 0, 0) -->
+<!-- 90 = matrix(6.12323e-17, 1, -1, 6.12323e-17, 0, 0) -->
+<!-- 0 = matrix(1, 0, 0, 1, 0, 0) -->
+
+
+
+<!-- Choses à faire : -->
